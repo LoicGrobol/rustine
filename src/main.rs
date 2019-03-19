@@ -15,11 +15,7 @@ fn main() {
 }
 
 fn count_char<R: std::io::BufRead + ?Sized>(r: &mut R, delim: u8)-> Result<usize, std::io::Error> {
-    // Empty file
-    if r.fill_buf().unwrap().len() == 0 {
-        return Ok(0);
-    };
-    let mut count = 1;
+    let mut count =0;
     loop {
         let (found, used) = {
             let available = match r.fill_buf() {
