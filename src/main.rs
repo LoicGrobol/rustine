@@ -1,4 +1,4 @@
-use memchr;
+use bytecount;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -16,20 +16,16 @@ fn main() {
 fn count_char<R: std::io::BufRead + ?Sized>(r: &mut R, delim: u8) -> Result<usize, std::io::Error> {
     let mut count = 0;
     loop {
-        let (found, used) = {
+        let used = {
             let available = match r.fill_buf() {
                 Ok(n) => n,
                 Err(ref e) if e.kind() == std::io::ErrorKind::Interrupted => continue,
                 Err(e) => return Err(e),
             };
-            match memchr::memchr(delim, available) {
-                Some(i) => (true, i + 1),
-                None => (false, available.len()),
-            }
+            count += bytecount::count(available, delim);
+            available.len()
         };
-        if found {
-            count += 1;
-        }
+       
         r.consume(used);
         if used == 0 {
             return Ok(count);
