@@ -5,4 +5,8 @@ authors = ["Loïc Grobol <loic.grobol@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-memchr = "2.2.0"
+bytecount = "0.5.1"
+
+[features]
+runtime-dispatch-simd = ["bytecount/runtime-dispatch-simd"]
+generic-simd = ["bytecount/generic-simd"]
